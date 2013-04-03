@@ -1,0 +1,28 @@
+<h1>Listing members</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Memo</th>
+    <% if session[:login].admin %>
+    <th></th>
+  </tr>
+
+<% @members.each do |member| %>
+  <tr>
+    <td><a href = "/members/<%= member.id %>"><%= member.name %></a></td>
+    <td><%= member.memo %></td>
+    <% if session[:login].admin %>
+      <td>
+	<%= link_to 'Destroy', member, method: :delete, data: { confirm: 'Are you sure?' }%>
+      </td>
+    <% end %>
+  </tr>
+<% end %>
+</table>
+
+<br />
+<% if session[:login].admin %>
+  <%= link_to 'New Member', new_member_path %> |
+<% end %>
+<%= link_to 'messages', {:controller => 'messages', :action => 'index'} %>

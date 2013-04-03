@@ -1,0 +1,23 @@
+<h1>Listing messages</h1>
+<p>※あなたが Friend 登録したメンバーのメッセージです。</p>
+
+<% @messages.each do |message| %>
+  <div class="messages_area">
+    <p class="member_name"><a href="/members/<%= message.member.id %>"><% message.member.name %></a></p>
+    <p class="message_content"><%= link_to message.content, message %></p>
+    <p class="message_create">(<% message.created_at.strftime '%Y-%m-%d %H:%M' %>)</p>
+  </div>
+<% end %>
+
+<p>page: 
+  <% if (@page.to_i - 1 > 0) %>
+	<%= link_to (@page.to_i - 1).to_s, :action => "index", :page => (@page.to_i - 1)%> /
+  <% end %>
+  <b><%= @page.to_s %></b>
+  <if @page.to_i + 1 <= @max_page >
+	<%= link_to (@page.to_i + 1).to_s, :action => "index", :page => (@page.to_i + 1)%> /
+  <% end %>
+</p>
+
+<%= link_to 'New Message', new_message_path %> |
+<%= link_to 'members', {:controller => 'members', :action => 'index'}%>

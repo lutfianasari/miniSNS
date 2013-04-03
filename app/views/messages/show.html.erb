@@ -1,0 +1,63 @@
+<h1>Show messages</h1>
+<p>※メッセージとコメントを表示します。</p>
+
+<div class="message_area">
+  <p>
+    <b>Member:</b>
+    <%= @message.member.name %>
+  </p>
+
+  <p>
+    <b>Content:</b>
+    <%= @message.content %>
+  </p>
+</div>
+
+<p>
+  <b>Comments:</b>
+<div class="message_area">
+  <ul>
+  <% @message.comment.each do |cmt| %>
+    <li><% if session[:login].id == cmt.member_id %>
+	<a href="/comments/<%= cmt.id %>/edit"><% end %>
+	<%= cmt.content %>(<%= cmt.member.name %>)
+	<% if session[:login].id == cmt.member_id %></a><% end %>
+    </li>
+  <% end %>
+  </ul>
+</div>  
+</p>
+
+<hr />
+
+<%= form_for(@comment, :url => {:action => 'comment'}) do |f| %>
+  <% if @message.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+	<%= pluralize(@comment.errors.count, "error") %> prohibited this member from being saved:
+      </h2>
+      <ul>
+	<% @comment.errors.full_messages.each do |msg| %>
+	  <li><%= msg %></li>
+	<% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.hidden_field :member_id %>
+    <%= f.hidden_field :message_id %>
+  </div>
+  <div class="field">
+    <%= f.label :content %>
+    <%= f.text_field :content %>
+  </div>
+  <div class="actions">
+    <%= f.submit :value => "comment" %>
+  </div>
+<% end %>
+
+<% if @isme %>
+  <%= link_to 'Edit', edit_message_path(@message) %> |
+<% end %>
+<%= link_to 'Back', messages_path %>

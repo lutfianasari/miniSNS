@@ -1,0 +1,92 @@
+<h1>Show member</h1>
+<p>※「<%= @member.name %>」の情報</p>
+<p id="notice"><%= notice %></p>
+
+<table>
+
+<% if @me %>
+<tr>
+    <th><b>User:</b></th>
+    <td><%= @member.user %></td>
+</tr>
+<% end %>
+
+<tr>
+    <th><b>Name:</b></th>
+    <td><%= @member.name %></td>
+</tr>
+
+<% if @me %>
+<tr>
+    <th><b>Mail:</b></th>
+    <td><%= @member.mail %></td>
+</tr>
+<% end %>
+
+<tr>
+    <th><b>Memo:</b></th>
+    <td><%= @member.memo %></td>
+</tr>
+
+<% if @member.admin %>
+<tr>
+    <th><b>Admin:</b></th>
+    <td><%= @member.admin %></td>
+</tr>
+<% end %>
+
+<% if @me or @isFr %>
+<tr>
+    <th><b>Friends</b></th>
+    <td><ul>
+	<% @friends.each do |fr| %>
+	  <li><a href="/members/<%= fr.id %>"><%= raw(fr.name)%></li>
+	<% end %>
+    </ul></td>
+</tr>
+
+<% if @isFded %>
+<tr>
+    <th><b>Friended</b></th>
+    <td><ul>
+	<% @friended.each do |fr| %>
+	  <li><a href="/members/<%= fr.id %>"><%= raw(fr.name)%></li>
+	<% end %>
+    </ul></td>
+</tr>
+<% end %>
+
+<tr>
+    <th><b>Messages</b></th>
+    <td><ul>
+	<% @member.message.each do |msg| %>
+	  <li><a href="/members/<%= msg.id %>"><%= raw(msg.content)%></li>
+	<% end %>
+    </td></ul>
+</tr>
+
+<% end %>
+
+<% if @me %>
+<tr>
+    <th><b>Comments</b></th>
+    <td><ul>
+	<% @member.comment.each do |cmt| %>
+	  <li><a href="/members/<%= cmt.message_id %>"><%= raw(cmt.content)%></li>
+	<% end %>
+    </ul></td>
+</tr>
+<% end %>
+</table>
+
+<br />
+
+<% if !@me %>
+  <%= link_to 'friend' , {:controller => 'members', :action => 'friend', :id => @member.id }%> |
+<% end %>
+<%= link_to 'messages', {:controller => 'messages', :action => 'index'} %> |
+<%= link_to 'members', {:controller => 'members', :action => 'index'} %> |
+<% if @me %>
+<%= link_to 'Edit', edit_member_path(@member) %> |
+<% end %>
+<%= link_to 'Back', members_path %>
